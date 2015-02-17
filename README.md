@@ -4,7 +4,7 @@ A library for working with REST resources.
 
 ## Basic Usage
 
-```
+```js
 var resourcery = require('resourcery');
 
 var resource = resourcery.resource('/foo/{bar}{?baz}')
@@ -30,6 +30,10 @@ Options can be a string containing a [URI template](https://tools.ietf.org/html/
 
 *Required*. A URI template string, as defined in [RFC6570](https://tools.ietf.org/html/rfc6570).
 
+##### transport
+
+*Optional*. The transport object that is responsible for making HTTP requests. It can be replaced with a mock transport for end-to-end and unit testing.
+
 ### actions(object)
 
 ### build()
@@ -41,9 +45,38 @@ This method must be called at the end of the configuration chain. Returns an obj
 
 The `options` argument is an object containing setting overrides for the underlying transport. When overriding transport options, you must pass `null` to the preceding arguments. For example:
 
-```
+```js
 resource.get(null, { headers: { 'X-Foo': 'foo' } });
 ```
+
+## Mock Transport
+
+A mock transport is provided for faking requests during development and for end-to-end or unit testing.
+
+### when(method, url, [data], [headers])
+
+Creates a new request handler with the following methods:
+
+#### respond([statusCode], data, [headers])
+
+Returns a response with the provided data when a matching request is found.
+
+## Convenience Methods
+
+### defaults(options)
+
+Returns a wrapper around the default API. The provided options are applied to all resources created by the wrapped factory function:
+
+```js
+var fakeTransport = { request: function () { console.log('fake'); } };
+
+var r = resourcery.defaults({ transport: fakeTransport });
+
+var resource = r.resource('http://example.org/{userId}')
+  .actions({ get: { method: 'GET' });
+```
+
+In the above example, all resources created from the wrapped object will use the fake transport.
 
 ## Acknowledgements
 

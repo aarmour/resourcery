@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^2.9.7",
+    "equals": "^1.0.0",
     "lodash": "^3.1.0",
     "request": "^2.53.0",
     "uri-template": "^1.0.0"
