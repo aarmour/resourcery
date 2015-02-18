@@ -34,7 +34,16 @@ Options can be a string containing a [URI template](https://tools.ietf.org/html/
 
 ### build()
 
-Returns the resource. This function must be called at the end of the configuration chain.
+This method must be called at the end of the configuration chain. Returns an object that contains the resource actions. The action methods can be invoked with the following arguments:
+
+* GET actions: `Resource.action([parameters], [options], [callback])`
+* non-GET actions: `Resource.action([parameters], data, [options], [callback])`
+
+The `options` argument is an object containing setting overrides for the underlying transport. When overriding transport options, you must pass `null` to the preceding arguments. For example:
+
+```
+resource.get(null, { headers: { 'X-Foo': 'foo' } });
+```
 
 ## Acknowledgements
 
