@@ -1,5 +1,6 @@
 {
   "name": "resourcery",
+  "private": true,
   "version": "0.0.0",
   "description": "Simplifies working with REST resources.",
   "main": "index.js",
