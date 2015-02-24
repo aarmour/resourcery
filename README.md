@@ -57,9 +57,13 @@ A mock transport is provided for faking requests during development and for end-
 
 Creates a new request handler with the following methods:
 
+#### delay(interval)
+
+Delays the response by the specified interval, in milliseconds.
+
 #### respond([statusCode], data, [headers])
 
-Returns a response with the provided data when a matching request is found.
+Returns a response with the provided data when a matching request is found. The `data` and `headers` arguments accept callback functions that when called return the respective values.
 
 ## Convenience Methods
 

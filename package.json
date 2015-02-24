@@ -17,6 +17,7 @@
     "uri-template": "^1.0.0"
   },
   "devDependencies": {
+    "sinon": "^1.12.2",
     "tap-spec": "^2.2.1",
     "tape": "^3.5.0"
   }
