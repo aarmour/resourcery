@@ -1,5 +1,7 @@
 # Resourcery
 
+[![Build Status](https://travis-ci.org/aarmour/resourcery.svg)](https://travis-ci.org/aarmour/resourcery)
+
 A library for working with REST resources.
 
 ## Basic Usage
