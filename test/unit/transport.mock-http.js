@@ -1,5 +1,6 @@
 var test = require('tape');
 var sinon = require('sinon');
+var HttpError = require('../../').HttpError;
 var MockHttpTransport = require('../../lib/transport').MockHttpTransport;
 
 test('when(method, url, data, headers): should register a new definition', function (t) {
@@ -33,7 +34,7 @@ test('when(method, url, data, headers): should add a new definition', function (
 });
 
 test('respond(statusCode, data, headers): should configure the response', function (t) {
-  t.plan(18);
+  t.plan(19);
 
   var transport = new MockHttpTransport();
 
@@ -106,12 +107,21 @@ test('respond(statusCode, data, headers): should configure the response', functi
   // Change a response
   transport.when('GET', '/changeresponse')
     .respond(200, {message: 'original'})
-    .respond(500, {message: 'updated'});
+    .respond(202, {message: 'updated'});
 
   transport.request('/changeresponse')
     .then(function (result) {
-      t.equal(result.statusCode, 500);
+      t.equal(result.statusCode, 202);
       t.deepEqual(result.data, {message: 'updated'});
+    });
+
+  // Non-success status code
+  transport.when('GET', '/500')
+    .respond(500, {message: 'error'});
+
+  transport.request('/500')
+    .catch(function (error) {
+      t.ok(error instanceof HttpError);
     });
 });
 
