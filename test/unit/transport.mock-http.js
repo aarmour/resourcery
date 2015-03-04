@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var test = require('tape');
 var sinon = require('sinon');
 var HttpError = require('../../').HttpError;
@@ -122,6 +123,47 @@ test('respond(statusCode, data, headers): should configure the response', functi
   transport.request('/500')
     .catch(function (error) {
       t.ok(error instanceof HttpError);
+    });
+});
+
+test('passThrough()', function (t) {
+  t.plan(3);
+
+  var mockDelegateTransport = {
+    request: function (config) {
+      return Promise.resolve(config);
+    }
+  };
+
+  var transport = new MockHttpTransport({transport: mockDelegateTransport});
+
+  // Passes through
+  transport.when('GET', '/passthrough')
+    .passThrough();
+
+  transport.request('/passthrough')
+    .then(function (result) {
+      t.equal(result.uri, '/passthrough');
+    });
+
+  // Overrides response
+  transport.when('GET', '/passthrough/override')
+    .respond(200)
+    .passThrough();
+
+  transport.request('/passthrough/override')
+    .then(function (result) {
+      t.equal(result.uri, '/passthrough/override');
+    });
+
+  // Response overrides passthrough
+  transport.when('GET', '/response')
+    .passThrough()
+    .respond(200);
+
+  transport.request('/response')
+    .then(function (result) {
+      t.equal(result.statusCode, 200);
     });
 });
 
